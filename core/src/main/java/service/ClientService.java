@@ -7,6 +7,7 @@ import java.util.List;
 public interface ClientService extends BaseService<Long, Client> {
     void addClient(Client entity);
     List<Client> getAllClients(String... sort);
+    List<Client> filterBy(Client example);
     List<Client> filterClientsByFirstName(String name);
     List<Client> filterClientsByLastName(String name);
     List<Client> filterClientsByAge(int age);

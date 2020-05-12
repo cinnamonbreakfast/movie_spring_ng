@@ -15,5 +15,5 @@ public class Client extends domain.Entity<Long> {
     private String firstName;
     private String secondName;
     private String job;
-    private int age;
+    private Integer age;
 }

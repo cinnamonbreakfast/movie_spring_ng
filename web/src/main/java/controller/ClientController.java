@@ -1,6 +1,7 @@
 package controller;
 
 import converter.ClientConverter;
+import domain.Client;
 import dto.ClientDTO;
 import dto.ClientsDTO;
 import org.slf4j.Logger;
@@ -11,7 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.ClientService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class ClientController {
@@ -24,9 +29,12 @@ public class ClientController {
     private ClientConverter clientConverter;
 
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
-    ClientsDTO getClients() {
+    List<ClientDTO> getClients() {
         log.trace("getClients - method entered");
-        return new ClientsDTO(clientConverter.convertModelsToDtos(clientService.getAll()));
+
+        List<Client> clientDTOS = clientService.getAll();
+
+        return new ArrayList<>(clientConverter.convertModelsToDtos(clientDTOS));
     }
 
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
@@ -68,6 +76,21 @@ public class ClientController {
         log.trace("deleteClient - method finished");
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/clients/filter", method  = RequestMethod.GET)
+    List<ClientDTO> filterBy(@RequestParam Optional<String> firstName, @RequestParam Optional<String> secondName, @RequestParam Optional<String> job, @RequestParam Optional<Integer> age)
+    {
+        log.trace("filterBy - method entered: firstName={}, secondName={}, job={}, age={}", firstName, secondName, job, age);
+
+        Client client = new Client();
+
+        firstName.ifPresent(client::setFirstName);
+        secondName.ifPresent(client::setSecondName);
+        job.ifPresent(client::setJob);
+        age.ifPresent(client::setAge);
+
+        return new ArrayList<>(clientConverter.convertModelsToDtos(clientService.filterBy(client)));
     }
 
     @RequestMapping(value = "/clients/filter/firstName/{firstName}", method = RequestMethod.GET)

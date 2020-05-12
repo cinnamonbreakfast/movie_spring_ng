@@ -25,7 +25,7 @@ public abstract class BaseConverter<Model extends Entity<Long>, Dto extends Base
 
     public Set<Dto> convertModelsToDtos(Collection<Model> models) {
         return models.stream()
-                .map(model -> convertModelToDto(model))
+                .map(this::convertModelToDto)
                 .collect(Collectors.toSet());
     }
 }

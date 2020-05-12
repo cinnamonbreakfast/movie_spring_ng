@@ -14,6 +14,6 @@ import javax.persistence.Entity;
 public class Movie extends domain.Entity<Long> {
     private String name;
     private String description;
-    private int price;
-    private int rating;
+    private Integer price;
+    private Integer rating;
 }

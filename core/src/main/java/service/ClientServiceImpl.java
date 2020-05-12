@@ -6,6 +6,7 @@ import domain.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -139,5 +140,23 @@ public class ClientServiceImpl implements ClientService {
             return client.get();
         }
         throw new RuntimeException("Could not find client by given ID.");
+    }
+
+    public List<Client> filterBy(Client example)
+    {
+        log.trace("filterBy - method entered: example={}", example);
+        return clientRepository.findAll(Example.of(example));
+    }
+
+    public List<Client> filterBy(Optional<String> firstName, Optional<String> secondName, Optional<String> job, Optional<Integer> age)
+    {
+        Client client = new Client();
+
+        firstName.ifPresent(client::setFirstName);
+        secondName.ifPresent(client::setSecondName);
+        job.ifPresent(client::setJob);
+        age.ifPresent(client::setAge);
+
+        return clientRepository.findAll(Example.of(client));
     }
 }
