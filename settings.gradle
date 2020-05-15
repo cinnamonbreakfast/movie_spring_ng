@@ -1,5 +1,5 @@
-rootProject.name = 'java_rest'
+rootProject.name = 'movie_rental'
 include 'core'
 include 'web'
-include 'client'
+include 'frontend'
 

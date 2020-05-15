@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repository.ClientRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> getAllClients(String... sort) {
         log.trace("getAllClients - method entered: sort={}", (Object[]) sort);
-        Iterable<Client> clients = clientRepository.findAll(new Sort(Sort.Direction.ASC, sort));
+        Iterable<Client> clients = clientRepository.findAll();
         log.trace("getAllClients - method finished");
         return StreamSupport.stream(
                 clients.spliterator(),
@@ -116,8 +118,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> getAllSortedAscendingByFields(String fields) {
         log.trace("getAllSortedAscendingByFields - method entered: fields={}", fields);
-        Sort sort = new Sort(Sort.Direction.ASC, fields);
-        List<Client> clients = clientRepository.findAll(sort);
+        List<Client> clients = clientRepository.findAll();
         log.trace("getAllSortedAscendingByFields - method finished");
         return clients;
     }
@@ -125,8 +126,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> getAllSortedDescendingByFields(String fields) {
         log.trace("getAllSortedDescendingByFields - method entered: fields={}", fields);
-        Sort sort = new Sort(Sort.Direction.DESC, fields);
-        List<Client> clients = clientRepository.findAll(sort);
+        List<Client> clients = clientRepository.findAll();
         log.trace("getAllSortedDescendingByFields - method finished");
         return clients;
     }

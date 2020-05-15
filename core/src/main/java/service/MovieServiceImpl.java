@@ -29,8 +29,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> getAllMovies(String... sort) {
-        Sort sorted = new Sort(sort);
-        Iterable<Movie> clients = movieRepository.findAll(sorted);
+        Iterable<Movie> clients = movieRepository.findAll();
         return StreamSupport.stream(
                 clients.spliterator(),
                 false)
@@ -39,8 +38,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> filterMovieByName(String s) {
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
@@ -51,8 +49,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> filterMovieByDescription(String d) {
-        Sort sort = new Sort(Sort.Direction.ASC,"description");
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
@@ -62,8 +59,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> filterMovieByPrice(int p) {
-        Sort sort = new Sort(Sort.Direction.ASC,"price");
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
@@ -73,8 +69,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> filterMovieByRating(int r) {
-        Sort sort = new Sort(Sort.Direction.ASC,"rating");
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
@@ -110,8 +105,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> getAllSortedAscendingByFields(String fields) {
-        Sort sort = new Sort(Sort.Direction.ASC, fields);
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
@@ -120,8 +114,7 @@ public class MovieServiceImpl implements MovieService{
 
     @Override
     public List<Movie> getAllSortedDescendingByFields(String fields) {
-        Sort sort = new Sort(Sort.Direction.DESC, fields);
-        Iterable<Movie> movies = movieRepository.findAll(sort);
+        Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
                 false)
