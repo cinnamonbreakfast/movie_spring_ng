@@ -1,0 +1,21 @@
+<div *ngIf="client">
+    <h2>Student {{client.firstName}} details</h2>
+    <div>
+        <label>First name: </label> {{client.firstName}}
+        <input [(ngModel)]="client.firstName" placeholder="some name">
+    </div>
+    <div>
+        <label>Last name: </label> {{client.secondName}}
+        <input [(ngModel)]="client.secondName" placeholder="some other name">
+    </div>
+    <div>
+        <label>Job: </label> {{client.job}}
+        <input [(ngModel)]="client.job" placeholder="some job">
+    </div>
+    <div>
+        <label>Age: </label> {{client.age}}
+        <input [(ngModel)]="client.age" placeholder="some age">
+    </div>
+    <button (click)="goBack()">Back</button>
+    <button (click)="save()">Save</button>
+</div>
