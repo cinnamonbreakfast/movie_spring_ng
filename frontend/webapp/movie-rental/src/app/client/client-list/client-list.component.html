@@ -1,18 +1,94 @@
-<div *ngIf="selectedClient">
-    <h2>
-        {{selectedClient.firstName | uppercase}} was selected
-    </h2>
-    <button (click)="gotoDetail()">View Details</button>
-</div>
+<div class="client-control">
+    <div class="listing">
+        <h2>Clients</h2>
+        <a class="new-button" routerLink="/clients/new" class="new">New</a>
+        <p class="filterToggle"
+            [class.active]="filterOn == true"
+            (click)="toggleFilter()">Sort & Filter</p>
 
-<h2>Clients</h2>
-<ol class="clients">
-    <li *ngFor="let client of clients "
-        [class.selected]="client === selectedClient"
-        (click)="onSelect(client)">
-        {{client.firstName}}
-        {{client.secondName}}
-        {{client.job}}
-        {{client.age}}
-    </li>
-</ol>
+        <form class="search-form" [class.active]="filterOn == true" (submit)="filterAction($event)">
+            <div class="form-group">
+                <label for="fname">First name</label>
+                <input [(ngModel)]="filterProbe.firstName" type="text" id="fname" name="fname">
+
+                <div class="sort">
+                    <input type="radio" name="firstName" id="SFA" value="ASC" (change)="filterField($event)"><label for="SFA">ASC</label>
+                    <input type="radio" name="firstName" id="SFD" value="DESC" (change)="filterField($event)"><label for="SFD">DESC</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lname">Last name</label>
+                <input [(ngModel)]="filterProbe.secondName" type="text" id="lname" name="lname" value="">
+
+                <div class="sort">
+                    <input type="radio" name="secondName" id="SSA" value="ASC" (change)="filterField($event)"><label for="SSA">ASC</label>
+                    <input type="radio" name="secondName" id="SSD" value="DESC" (change)="filterField($event)"><label for="SSD">DESC</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="job">Job</label>
+                <input [(ngModel)]="filterProbe.job" type="text" id="job" name="job" value="">
+
+                <div class="sort">
+                    <input type="radio" name="job" id="SJA" value="ASC" (change)="filterField($event)"><label for="SJA">ASC</label>
+                    <input type="radio" name="job" id="SJD" value="DESC" (change)="filterField($event)"><label for="SJD">DESC</label>
+                </div>
+            </div>
+
+            <div class="form-group age">
+                <label for="age">Age</label>
+                <input type="range" id="age" name="age" min="20" #age max="99" value={{filterAge}} (change)="filterChangeAge(age.value)">
+                <input [(ngModel)]="filterProbe.age" type="text" id="vage" name="vage" #agebox value={{filterAge}} (change)="filterChangeAge(agebox.value)">
+
+                <div class="sort">
+                    <input type="radio" name="age" id="SAA" value="ASC" (change)="filterField($event)"><label for="SAA">ASC</label>
+                    <input type="radio" name="age" id="SAD" value="DESC" (change)="filterField($event)"><label for="SAD">DESC</label>
+                </div>
+            </div>
+
+            <input type="submit" value="Show"/>
+            <input type="button" value="Clear" (click)="clearForm()"/>
+        </form>
+
+        <ul class="clients">
+            <li *ngFor="let client of clients "
+                [class.selected]="client === selectedClient"
+                (click)="onSelect(client)">
+                <h3>{{client.firstName}}
+                {{client.secondName}}</h3>
+                <p>{{client.job}}</p>
+                <p>{{client.age}}</p>
+            </li>
+        </ul>
+
+        <ul class="pagination">
+            <li *ngFor="let page of counter(pages); let i = index "
+                [class.selected]="i == currentPage"
+                (click)="changePage(i)">
+                {{i + 1}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="detailed">
+        <div *ngIf="selectedClient">
+            <h2>
+                {{selectedClient.firstName | uppercase}} was selected
+            </h2>
+            <button (click)="gotoDetail()">View Details</button>
+            <button (click)="deleteClient()" class="delete">Delete</button>
+        
+            <div class="movies">
+                <h3>Rented Movies</h3>
+                <ul *ngIf="selectedClient.movieDTOList">
+                    <li *ngFor="let movie of this.selectedClient.movieDTOList">
+                        <h3>{{movie.name}}</h3>
+                        <p>{{movie.description}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

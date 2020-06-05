@@ -3,18 +3,22 @@ package com.mpp.movie_rental.controller;
 import com.mpp.movie_rental.converter.ClientConverter;
 import com.mpp.movie_rental.dto.ClientDTO;
 import com.mpp.movie_rental.dto.ClientsDTO;
+import com.mpp.movie_rental.dto.PageDTO;
+import com.mpp.movie_rental.dto.SortDTO;
 import domain.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ClientService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class ClientController {
@@ -36,12 +40,13 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
-    void saveClient(@RequestBody ClientDTO clientDTO) {
+    ClientDTO saveClient(@RequestBody ClientDTO clientDTO) {
         log.trace("saveClient - method entered: clientDTO={}", clientDTO);
-        clientService.addClient(
-            clientConverter.convertDtoToModel(clientDTO)
-        );
-        log.trace("saveClient - method finished");
+        clientDTO.setId(null);
+
+        return clientConverter.convertModelToDto(clientService.addClient(
+                clientConverter.convertDtoToModel(clientDTO)
+        ));
     }
 
     @RequestMapping(value = "/clients/{id}", method = RequestMethod.PUT)
@@ -69,68 +74,40 @@ public class ClientController {
     ResponseEntity<?> deleteClient(@PathVariable Long id){
         log.trace("deleteClient - method entered: id={}", id);
 
-        clientService.removeClient(id);
+        this.clientService.removeClient(id);
 
         log.trace("deleteClient - method finished");
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/clients/filter", method  = RequestMethod.GET)
-    List<ClientDTO> filterBy(@RequestParam Optional<String> firstName, @RequestParam Optional<String> secondName, @RequestParam Optional<String> job, @RequestParam Optional<Integer> age)
+    @RequestMapping(value = "/clients/page/{page}/{count}/filter", method  = RequestMethod.GET)
+    ClientsDTO filterBy(@RequestParam(required = false) String firstName, @RequestParam(required = false) String secondName, @RequestParam(required = false) String job, @RequestParam(required = false) Integer age, @PathVariable Integer page, @PathVariable Integer count)
     {
         log.trace("filterBy - method entered: firstName={}, secondName={}, job={}, age={}", firstName, secondName, job, age);
 
         Client client = new Client();
 
-        firstName.ifPresent(client::setFirstName);
-        secondName.ifPresent(client::setSecondName);
-        job.ifPresent(client::setJob);
-        age.ifPresent(client::setAge);
+        client.setFirstName(firstName);
+        client.setSecondName(secondName);
+        client.setJob(job);
+        client.setAge(age);
 
-        return new ArrayList<>(clientConverter.convertModelsToDtos(clientService.filterBy(client)));
-    }
+        Page<Client> pageable = clientService.filterBy(Example.of(client), PageRequest.of(page, count, Sort.by("firstName").ascending()));
 
-    @RequestMapping(value = "/clients/filter/firstName/{firstName}", method = RequestMethod.GET)
-    ClientsDTO filterClientsByFirstName(@PathVariable String firstName)
-    {
-        log.trace("filterClientsByFirstName - method entered: firstName={}", firstName);
+        ClientsDTO clientsDTO = new ClientsDTO();
+        clientsDTO.setClients(clientConverter.convertModelsToDtos(pageable.getContent()));
+        clientsDTO.setPage(page);
+        clientsDTO.setPagesCount(pageable.getTotalPages());
 
-        return new ClientsDTO(
-                clientConverter.convertModelsToDtos(
-                        clientService.filterClientsByFirstName(firstName)
-                )
-        );
-    }
-
-    @RequestMapping(value = "/clients/filter/secondName/{secondName}", method = RequestMethod.GET)
-    ClientsDTO filterClientsBySecondName(@PathVariable String secondName)
-    {
-        log.trace("filterClientsBySecondName - method entered: secondName={}", secondName);
-
-        return new ClientsDTO(
-                clientConverter.convertModelsToDtos(
-                        clientService.filterClientsByLastName(secondName)
-                )
-        );
-    }
-
-    @RequestMapping(value = "/clients/filter/age/{age}", method = RequestMethod.GET)
-    ClientsDTO filterClientsByAge(@PathVariable int age)
-    {
-        log.trace("filterClientsByAge - method entered: age={}", age);
-        return new ClientsDTO(
-                clientConverter.convertModelsToDtos(
-                        clientService.filterClientsByAge(age)
-                )
-        );
+        return clientsDTO;
     }
 
     @RequestMapping(value = "/clients/sorted/asc/{fields}", method = RequestMethod.GET)
-    ClientsDTO getAllSortedAscendingByFields(@PathVariable String fields)
+    List<ClientDTO> getAllSortedAscendingByFields(@PathVariable String[] fields)
     {
-        log.trace("getAllSortedAscendingByFields - method entered: fields={}", fields);
-        return new ClientsDTO(
+        log.trace("getAllSortedAscendingByFields - method entered: fields={}", (Object) fields);
+        return new ArrayList<>(
                 clientConverter.convertModelsToDtos(
                         clientService.getAllSortedAscendingByFields(fields)
                 )
@@ -138,13 +115,76 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/clients/sorted/desc/{fields}", method = RequestMethod.GET)
-    ClientsDTO getAllSortedDescendingByFields(@PathVariable String fields)
+    List<ClientDTO> getAllSortedDescendingByFields(@PathVariable String[] fields)
     {
-        log.trace("getAllSortedDescendingByFields - method entered: fields={}", fields);
-        return new ClientsDTO(
+        log.trace("getAllSortedDescendingByFields - method entered: fields={}", (Object) fields);
+        return new ArrayList<>(
                 clientConverter.convertModelsToDtos(
                         clientService.getAllSortedDescendingByFields(fields)
                 )
         );
+    }
+
+    @RequestMapping(value = "/clients/page/total/{page}/{count}", method = RequestMethod.GET)
+    Integer getPages(@PathVariable Integer count, @PathVariable Integer page)
+    {
+        log.trace("getPages - method entered: count={}, page={}", count, page);
+
+        return clientService.findAll(PageRequest.of(page, count)).getTotalPages();
+    }
+
+    @RequestMapping(value = "/clients/page/{page}/{count}", method = RequestMethod.GET)
+    List<ClientDTO> getPage(@PathVariable Integer count, @PathVariable Integer page)
+    {
+        log.trace("getPages - method entered: count={}, page={}", count, page);
+
+        return new ArrayList<>(
+                clientConverter.convertModelsToDtos(
+                        clientService.findAll(
+                                PageRequest.of(
+                                        page,
+                                        count,
+                                        Sort.by("firstName")
+                                )
+                        )
+                                .getContent()
+                )
+        );
+    }
+
+    @RequestMapping(value = "/clients/page/{page}/{size}", method = RequestMethod.POST)
+    ClientsDTO getPage(@PathVariable Integer page, @PathVariable Integer size, @RequestBody(required = false) ClientDTO probe, @RequestParam(required = false) String[] sorting)
+    {
+        log.trace("getPage - method entered: page={}, size={}, probe={}, sort={}", page, size, probe, sorting);
+
+        Sort sortingP = Sort.by("firstName").ascending();;
+
+        if(sorting != null) {
+            if (sorting.length > 0 && sorting.length % 2 == 0) {
+                Arrays.stream(sorting).reduce((e, v) -> {
+                    if (v.equals("ASC")) {
+                        sortingP.and(Sort.by(e).ascending());
+                    } else {
+                        sortingP.and(Sort.by(e).descending());
+                    }
+                    return "";
+                });
+            }
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        pageable.getSort().and(sortingP);
+
+        log.trace("sorting={}", pageable.getSort());
+
+        Page<Client> response;
+        response = clientService.filterBy(Example.of(clientConverter.convertDtoToModel(probe)), pageable);
+
+        ClientsDTO clientsDTO = new ClientsDTO();
+        clientsDTO.setPage(page);
+        clientsDTO.setPagesCount(response.getTotalPages());
+        clientsDTO.setClients(clientConverter.convertModelsToDtos(response.getContent()));
+
+        return clientsDTO;
     }
 }

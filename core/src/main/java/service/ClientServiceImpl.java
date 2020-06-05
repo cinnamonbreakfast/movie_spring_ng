@@ -6,8 +6,7 @@ import domain.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,58 +27,9 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository clientRepository;
 
     @Override
-    public void addClient(Client entity) {
+    public Client addClient(Client entity) {
         log.trace("addClient - method entered: student={}", entity);
-        clientRepository.save(entity);
-        log.trace("addClient - method finished");
-    }
-
-    @Override
-    public List<Client> getAllClients(String... sort) {
-        log.trace("getAllClients - method entered: sort={}", (Object[]) sort);
-        Iterable<Client> clients = clientRepository.findAll();
-        log.trace("getAllClients - method finished");
-        return StreamSupport.stream(
-                clients.spliterator(),
-                false)
-                .collect(Collectors.toList());
-
-    }
-
-    @Override
-    public List<Client> filterClientsByFirstName(String name) {
-        log.trace("filterClientsByFirstName - method entered: name={}", name);
-        Iterable<Client> clients = clientRepository.findAll();
-        log.trace("filterClientsByFirstName - method finished");
-        return StreamSupport.stream(
-                clients.spliterator(),
-                false)
-                .filter((e)-> e.getFirstName().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Client> filterClientsByLastName(String name) {
-        log.trace("filterClientsByLastName - method entered: name={}", name);
-        Iterable<Client> clients = clientRepository.findAll();
-        log.trace("filterClientsByLastName - method finished");
-        return StreamSupport.stream(
-                clients.spliterator(),
-                false)
-                .filter((e)-> e.getSecondName().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Client> filterClientsByAge(int age) {
-        log.trace("filterClientsByAge - method entered: age={}", age);
-        Iterable<Client> clients = clientRepository.findAll();
-        log.trace("filterClientsByAge - method finished");
-        return StreamSupport.stream(
-                clients.spliterator(),
-                false)
-                .filter((e)->e.getAge()==age)
-                .collect(Collectors.toList());
+        return clientRepository.save(entity);
     }
 
     @Override
@@ -116,17 +66,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> getAllSortedAscendingByFields(String fields) {
-        log.trace("getAllSortedAscendingByFields - method entered: fields={}", fields);
-        List<Client> clients = clientRepository.findAll();
+    public List<Client> getAllSortedAscendingByFields(String[] fields) {
+        log.trace("getAllSortedAscendingByFields - method entered: fields={}", (Object) fields);
+        List<Client> clients = clientRepository.findAll(Sort.by(fields).ascending());
         log.trace("getAllSortedAscendingByFields - method finished");
         return clients;
     }
 
     @Override
-    public List<Client> getAllSortedDescendingByFields(String fields) {
-        log.trace("getAllSortedDescendingByFields - method entered: fields={}", fields);
-        List<Client> clients = clientRepository.findAll();
+    public List<Client> getAllSortedDescendingByFields(String[] fields) {
+        log.trace("getAllSortedDescendingByFields - method entered: fields={}", (Object) fields);
+        List<Client> clients = clientRepository.findAll(Sort.by(fields).ascending());
         log.trace("getAllSortedDescendingByFields - method finished");
         return clients;
     }
@@ -148,6 +98,7 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findAll(Example.of(example));
     }
 
+    @Override
     public List<Client> filterBy(Optional<String> firstName, Optional<String> secondName, Optional<String> job, Optional<Integer> age)
     {
         Client client = new Client();
@@ -158,5 +109,18 @@ public class ClientServiceImpl implements ClientService {
         age.ifPresent(client::setAge);
 
         return clientRepository.findAll(Example.of(client));
+    }
+
+    @Override
+    public Page<Client> filterBy(Example<Client> matcher, Pageable pageRequest)
+    {
+        return clientRepository.findAll(matcher, pageRequest);
+    }
+
+    @Override
+    public Page<Client> findAll(Pageable pageRequest) {
+        log.trace("findAll - method entered: pageRequest={}", pageRequest);
+
+        return clientRepository.findAll(pageRequest);
     }
 }

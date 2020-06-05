@@ -2,6 +2,8 @@ package com.mpp.movie_rental.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -12,5 +14,6 @@ public class ClientDTO extends BaseDTO {
     private String firstName;
     private String secondName;
     private String job;
-    private int age;
+    private Integer age;
+    private List<MovieDTO> movieDTOList;
 }

@@ -117,9 +117,9 @@ public class MovieController {
 
 
     @RequestMapping(value = "/movies/sorted/asc/{fields}", method = RequestMethod.GET)
-    MoviesDTO getAllSortedAscendingByFields(@PathVariable String fields)
+    MoviesDTO getAllSortedAscendingByFields(@PathVariable String[] fields)
     {
-        log.trace("getAllSortedAscendingByFields - method entered: fields={}", fields);
+        log.trace("getAllSortedAscendingByFields - method entered: fields={}", (Object) fields);
         return new MoviesDTO(
                 movieConverter.convertModelsToDtos(
                         movieService.getAllSortedAscendingByFields(fields)
@@ -128,9 +128,9 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movies/sorted/desc/{fields}", method = RequestMethod.GET)
-    MoviesDTO getAllSortedDescendingByFields(@PathVariable String fields)
+    MoviesDTO getAllSortedDescendingByFields(@PathVariable String[] fields)
     {
-        log.trace("getAllSortedDescendingByFields - method entered: fields={}", fields);
+        log.trace("getAllSortedDescendingByFields - method entered: fields={}", (Object) fields);
         return new MoviesDTO(
                 movieConverter.convertModelsToDtos(
                         movieService.getAllSortedDescendingByFields(fields)

@@ -4,4 +4,5 @@ export class Client {
     secondName: string;
     job: string;
     age: number;
+    movieDTOList: []
 }

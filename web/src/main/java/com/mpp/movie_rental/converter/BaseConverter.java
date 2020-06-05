@@ -4,6 +4,7 @@ import domain.Entity;
 import com.mpp.movie_rental.dto.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,21 +12,21 @@ public abstract class BaseConverter<Model extends Entity<Long>, Dto extends Base
         implements Converter<Model, Dto> {
 
 
-    public Set<Long> convertModelsToIDs(Set<Model> models) {
+    public List<Long> convertModelsToIDs(Set<Model> models) {
         return models.stream()
                 .map(model -> model.getId())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    public Set<Long> convertDTOsToIDs(Set<Dto> dtos) {
+    public List<Long> convertDTOsToIDs(Set<Dto> dtos) {
         return dtos.stream()
                 .map(dto -> dto.getId())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    public Set<Dto> convertModelsToDtos(Collection<Model> models) {
+    public List<Dto> convertModelsToDtos(Collection<Model> models) {
         return models.stream()
                 .map(this::convertModelToDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

@@ -2,10 +2,14 @@ package com.mpp.movie_rental.converter;
 
 import domain.Client;
 import com.mpp.movie_rental.dto.ClientDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClientConverter extends BaseConverter<Client, ClientDTO> {
+    @Autowired
+    MovieConverter movieConverter;
+
     @Override
     public Client convertDtoToModel(ClientDTO dto) {
         Client client = Client.builder()
@@ -25,6 +29,7 @@ public class ClientConverter extends BaseConverter<Client, ClientDTO> {
                 .secondName(client.getSecondName())
                 .age(client.getAge())
                 .job(client.getJob())
+                .movieDTOList(movieConverter.convertModelsToDtos(client.getMovies()))
                 .build();
         dto.setId(client.getId());
         return dto;

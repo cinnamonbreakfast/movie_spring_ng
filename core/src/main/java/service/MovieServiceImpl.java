@@ -104,7 +104,7 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public List<Movie> getAllSortedAscendingByFields(String fields) {
+    public List<Movie> getAllSortedAscendingByFields(String[] fields) {
         Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),
@@ -113,7 +113,7 @@ public class MovieServiceImpl implements MovieService{
     }
 
     @Override
-    public List<Movie> getAllSortedDescendingByFields(String fields) {
+    public List<Movie> getAllSortedDescendingByFields(String[] fields) {
         Iterable<Movie> movies = movieRepository.findAll();
         return StreamSupport.stream(
                 movies.spliterator(),

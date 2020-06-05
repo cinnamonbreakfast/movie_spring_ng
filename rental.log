@@ -1,0 +1,8 @@
+2020-05-25 00:00:19,092 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-2] getPage - method entered: page=0, size=3, probe=ClientDTO(super=BaseDTO(Id=null), firstName=null, secondName=null, job=null, age=null, movieDTOList=null), sort=[]
+2020-05-25 00:00:19,184 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-2] sorting=UNSORTED
+2020-05-25 00:00:20,222 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-3] getPage - method entered: page=1, size=3, probe=ClientDTO(super=BaseDTO(Id=null), firstName=null, secondName=null, job=null, age=null, movieDTOList=null), sort=[]
+2020-05-25 00:00:20,224 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-3] sorting=UNSORTED
+2020-05-25 00:00:21,013 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-7] getPage - method entered: page=0, size=3, probe=ClientDTO(super=BaseDTO(Id=null), firstName=null, secondName=null, job=null, age=null, movieDTOList=null), sort=[]
+2020-05-25 00:00:21,014 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-7] sorting=UNSORTED
+2020-05-25 00:01:23,741 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-6] getPage - method entered: page=1, size=3, probe=ClientDTO(super=BaseDTO(Id=null), firstName=null, secondName=null, job=null, age=null, movieDTOList=null), sort=[]
+2020-05-25 00:01:23,742 TRACE com.mpp.movie_rental.controller.ClientController [http-nio-8080-exec-6] sorting=UNSORTED

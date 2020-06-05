@@ -30,6 +30,8 @@ public class WebConfig {
                     return;
                 }
 
+                //.allowedOrigins("http://localhost:4200", "http://localhost:8080")
+
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200", "http://localhost:8080")
                         .allowedMethods("GET", "PUT", "POST", "DELETE");

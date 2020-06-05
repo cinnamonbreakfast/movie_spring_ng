@@ -1,0 +1,21 @@
+<div>
+    <h2>Adding new client</h2>
+    <div class="form-group">
+        <label>First name: </label>
+        <input type="text" #firstName placeholder="some name">
+    </div>
+    <div class="form-group">
+        <label>Last name: </label>
+        <input type="text" #secondName placeholder="some other name">
+    </div>
+    <div class="form-group">
+        <label>Job: </label>
+        <input type="text" #job placeholder="some job">
+    </div>
+    <div class="form-group">
+        <label>Age: </label>
+        <input type="text" #age placeholder="some age">
+    </div>
+    <button (click)="goBack()">Back</button>
+    <input type="submit" (click)="save(firstName.value, secondName.value, age.value, job.value)" value="Save">
+</div>

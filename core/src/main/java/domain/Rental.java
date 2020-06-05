@@ -3,6 +3,8 @@ package domain;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 @Entity
 @NoArgsConstructor
@@ -12,6 +14,9 @@ import javax.persistence.Entity;
 @ToString(callSuper = true)
 @Builder
 public class Rental extends domain.Entity<Long> {
-    private Long client;
-    private Long movie;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Client client;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Movie movie;
 }

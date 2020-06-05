@@ -12,6 +12,7 @@ import { ClientListComponent } from './client/client-list/client-list.component'
 
 import { ClientService } from './client/shared/client.service';
 import { ClientDetailComponent } from './client/client-detail/client-detail.component';
+import { ClientAddComponent } from './client/client-add/client-add.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ClientDetailComponent } from './client/client-detail/client-detail.comp
     MovieComponent,
     ClientListComponent,
     ClientDetailComponent,
+    ClientAddComponent,
   ],
   imports: [
     BrowserModule,

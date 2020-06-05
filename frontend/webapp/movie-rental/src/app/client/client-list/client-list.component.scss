@@ -1,42 +1,102 @@
-.selected {
-    background-color: #CFD8DC !important;
-    color: white;
+button {
+    margin-right: 0.5em;
+    color: #FFFFFF;
+    border: 0 none;
+    padding: 5px 15px;
+    border-radius: 5px;
+
+    background-color: #333333;
+
+    &.delete {
+        background-color: red;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #222222;
+    }
+}
+
+input {
+    &[type='button'] {
+        color: #FFFFFF;
+        border: 0 none;
+        padding: 5px 15px;
+        border-radius: 5px;
+
+        background-color: #333333;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #222222;
+        }
+    }
+
+    &[type='submit'] {
+        color: #FFFFFF;
+        border: 0 none;
+        padding: 5px 15px;
+        border-radius: 5px;
+
+        background-color: #333333;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #222222;
+        }
+    }
 }
 
 .clients {
     margin: 0 0 2em 0;
     padding: 0;
     width: 20em;
+    list-style: none;
 
     li {
         cursor: pointer;
         position: relative;
         left: 0;
-        background-color: #EEE;
+        background-color: #D6D6D6;
         margin: .5em;
-        padding: .5em 0.5em 0em;
-        height: 1.6em;
+        padding: .2em 0.5em 0.5em;
+        // height: 1.6em;
         border-radius: 4px;
 
-        .selected {
+        h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0.2em 0em;
+        }
+
+        p {
+            padding: 0em;
+            margin: 0em;
+        }
+
+        &.selected {
+            background-color: #333333 !important;
+            color: white;
+        }
+
+        &.selected {
             &:hover {
-                background-color: #BBD8DC !important;
+                background-color: #222222 !important;
                 color: white;
             }
         }
         
         &:hover {
-            color: #607D8B;
             background-color: #DDD;
         }
     }
 
-    .text {
+    &.text {
         position: relative;
         top: -3px;
     }
 
-    .badge {
+    &.badge {
         display: inline-block;
         font-size: small;
         color: white;
@@ -53,12 +113,230 @@
 }
 
 
-button {
-    .delete {
-        float:right;
-        margin-top: 2px;
-        margin-right: .8em;
-        background-color: gray !important;
-        color:white;
+// button {
+//     &.delete {
+//         float:right;
+//         margin-top: 2px;
+//         margin-right: .8em;
+//         background-color: gray !important;
+//         color:white;
+//     }
+// }
+
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-left: 0px;
+    list-style: none;
+
+    li {
+        
+        background-color: #D6D6D6;
+        border-radius: 3px;
+        margin-right: 4px;
+        color: #FFFFFF;
+        padding-top: 5px;
+
+        list-style: none;
+        display: inline-block;
+        width: 20px;
+        height: 25px;
+        text-align: center;
+        transition: 0.3s ease;;
+    
+        &.selected {
+            color: #FFFFFF;
+            background-color: #333;
+        }
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        &:last-child {
+            margin-right: 0px;
+        }
+    }
+}
+
+.client-control {
+    display: flex;
+    flex-wrap: wrap;
+
+    .listing {
+        display: inline-block;
+        margin-right: 2em;
+        position: relative;
+
+        .new {
+            position: absolute;
+            top: 1.5em;
+            right: 6em;
+
+            &-button {
+                margin-right: 0.5em;
+                color: #FFFFFF;
+                border: 0 none;
+                padding: 5px 15px;
+                border-radius: 5px;
+            
+                background-color: #333333;
+            
+                &.delete {
+                    background-color: red;
+                }
+            
+                &:hover {
+                    cursor: pointer;
+                    background-color: #222222;
+                }
+            }
+        }
+
+        .filterToggle {
+            position: absolute;
+            top: 0.8em;
+            right: .5px;
+            font-size: 14px;
+            
+            &:hover, &.active {
+                cursor: pointer;
+                color: #9FA8EB;
+            }
+        }
+
+        .search-form {
+            display: none;
+
+            .form-group {
+                display: block;
+                width: 100%;
+                margin-bottom: 0.5em;
+
+                label {
+                    display: block;
+                    font-size: 12px;
+                    color: #CBCBCB;
+                }
+
+                &.age {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    label {
+                        display: block;
+                    }
+
+                    input {
+                        display: inline-block;
+
+                        &[name='vage'] {
+                            width: 25px;
+                        }
+                    }
+                }
+
+                .sort {
+                    display: inline-flex;
+                    flex-wrap: wrap;
+
+                    input {
+                        display: inline;
+                    }
+                }
+            }
+
+            input {
+                &[type="submit"] {
+                    margin-right: 20px;
+                }
+
+                &[type="button"] {
+                    color: #818181;
+                    background-color: transparent;
+
+                    &:hover {
+                        background-color: #CBCBCB;
+                    }
+                }
+            }
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    .detailed {
+        display: inline-block;
+
+        ul {
+            margin: 0 0 2em 0;
+            padding: 0;
+            width: 20em;
+            list-style: none;
+
+            li {
+                cursor: pointer;
+                position: relative;
+                left: 0;
+                background-color: #D6D6D6;
+                margin: .5em;
+                padding: .2em 0.5em 0.5em;
+                // height: 1.6em;
+                border-radius: 4px;
+
+                h3 {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin: 0.2em 0em;
+                }
+
+                p {
+                    padding: 0em;
+                    margin: 0em;
+                }
+
+                &.selected {
+                    background-color: #333333 !important;
+                    color: white;
+                }
+
+                &.selected {
+                    &:hover {
+                        background-color: #222222 !important;
+                        color: white;
+                    }
+                }
+                
+                &:hover {
+                    background-color: #DDD;
+                }
+            }
+
+            &.text {
+                position: relative;
+                top: -3px;
+            }
+
+            &.badge {
+                display: inline-block;
+                font-size: small;
+                color: white;
+                padding: 0.8em 0.7em 0 0.7em;
+                background-color: #607D8B;
+                line-height: 1em;
+                position: relative;
+                left: -1px;
+                top: -4px;
+                height: 1.8em;
+                margin-right: .8em;
+                border-radius: 4px 0 0 4px;
+            }
+        }
     }
 }
